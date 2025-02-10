@@ -33,13 +33,15 @@ export default function Navigation() {
     const [users, setUsers] = useState(usersDB);
 
     const addUser = (newUser: User) => {
-        setUsers([...users, newUser]);
+        setUsers(prevUsers => [...prevUsers, newUser]);
     };
 
     return (
         <CartProvider>
             <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Inicio de Sesión' }} />
+                <Stack.Screen name="Login">
+                    {props => <LoginScreen {...props} users={users} />}
+                </Stack.Screen>
                 <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Tienda' }} />
                 <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: 'Detalle del Producto' }} />
                 <Stack.Screen name="Cart" component={CartScreen} options={{ title: 'Carrito de Compras' }} />

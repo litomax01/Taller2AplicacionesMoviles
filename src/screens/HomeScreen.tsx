@@ -14,15 +14,40 @@ export default function HomeScreen({ navigation }: any) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get<Product[]>('https://fakestoreapi.com/products')
-      .then(response => {
-        setProducts(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Error al cargar los productos:", error);
-        setLoading(false);
-      });
+    setLoading(true);
+    setProducts([
+      {
+        id: 1,
+        title: "Cien años de soledad",
+        price: 25.99,
+        image: "https://m.media-amazon.com/images/I/81X75oLE3yL._SL1500_.jpg"
+      },
+      {
+        id: 2,
+        title: "El Principito",
+        price: 10.50,
+        image: "https://m.media-amazon.com/images/I/71aFt4+OTOL._SL1500_.jpg"
+      },
+      {
+        id: 3,
+        title: "1984",
+        price: 18.75,
+        image: "https://m.media-amazon.com/images/I/71kxa1-0AfL._SL1500_.jpg"
+      },
+      {
+        id: 4,
+        title: "Don Quijote de la Mancha",
+        price: 30.99,
+        image: "https://m.media-amazon.com/images/I/81vpsIs58WL._SL1500_.jpg"
+      },
+      {
+        id: 5,
+        title: "Orgullo y prejuicio",
+        price: 15.99,
+        image: "https://m.media-amazon.com/images/I/71cJmPLqZiL._SL1500_.jpg"
+      }
+    ]);
+    setLoading(false);
   }, []);
 
   if (loading) {

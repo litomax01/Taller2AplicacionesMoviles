@@ -8,27 +8,24 @@ import { InputComponent } from '../components/InputComponent';
 import { ButtonComponent } from '../components/ButtonComponent';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../navigator/StackNavigator';
+import { RootStackParamList, User } from '../navigator/StackNavigator';
 
-// ✅ Agregamos tipado correcto para navegación
 type NavigationProps = StackNavigationProp<RootStackParamList, 'Login'>;
 
-const usersDB = [
-    { id: 1, name: 'Viviana Flores', email: 'vflores@gmail.com', password: '123456' },
-    { id: 2, name: 'Ariel Ron', email: 'aron@gmail.com', password: '123456' },
-];
+interface Props {
+    users: User[];
+    navigation: NavigationProps;
+}
 
-const LoginScreen = () => {
+const LoginScreen: React.FC<Props> = ({ users, navigation }) => {
     const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-    const [hiddenPassword, setHiddenPassword] = useState(true);
-    const navigation = useNavigation<NavigationProps>(); // ✅ Tipado corregido
 
     const handleChange = (name: string, value: string) => {
         setLoginForm({ ...loginForm, [name]: value });
     };
 
     const verifyUser = () => {
-        return usersDB.find((user) => user.email === loginForm.email && user.password === loginForm.password);
+        return users.find(user => user.email === loginForm.email && user.password === loginForm.password);
     };
 
     const handleLogin = () => {
@@ -42,7 +39,7 @@ const LoginScreen = () => {
             return;
         }
 
-        navigation.navigate('Home'); // ✅ Ahora `Home` está bien tipado
+        navigation.navigate('Home');
     };
 
     return (
@@ -57,7 +54,6 @@ const LoginScreen = () => {
                     <InputComponent placeholder="Contraseña" handleChange={handleChange} name="password" isPassword />
                 </View>
                 <ButtonComponent title="Iniciar" handleSendInfo={handleLogin} />
-                {/* ✅ Botón corregido para navegar a "Register" */}
                 <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.textRedirect}>¿No tienes cuenta? Regístrate aquí</Text>
                 </TouchableOpacity>
