@@ -1,41 +1,33 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator  }from '@react-navigation/stack';
+import HomeScreen from '../screens/HomeScreen';
+import ProductDetailScreen from '../screens/ProductDetail';
+import CartScreen from '../screens/CartScreen';
 import { LoginScreen } from '../screens/LoginScreen';
-import { PRIMARY_COLOR } from '../theme/commons/constants';
-import { HomeScreen } from '../screens/HomeScreen';
+import { CartProvider } from '../context/CartContext';
 
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-}
 
-const users: User[] = [
-    { id: 1, name: 'Viviana Flores', email: 'vflores@gmail.com', password: '123456' },
-    { id: 2, name: 'Ariel Ron', email: 'aron@gmail.com', password: '123456' },
-];
-
-const Stack = createStackNavigator();
-
-export const StackNavigator = () => {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                cardStyle: {
-                    backgroundColor: PRIMARY_COLOR,
-                },
-            }}
-        >
-            <Stack.Screen
-                name="Login"
-                options={{ headerShown: false }}
-                children={() => <LoginScreen users={users} />}
-            />
-            <Stack.Screen
-                name="Home"
-                options={{ headerShown: false }}
-                component={HomeScreen}
-            />
-        </Stack.Navigator>
-    );
+export type RootStackParamList = {
+  Login: undefined;
+  Home: undefined;
+  ProductDetail: { product: { id: number; title: string; price: number; image: string } };
+  Cart: undefined;
 };
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+export default function Navigation() {
+  return (
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Inicio de Sesión' }} />
+          <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Tienda' }} />
+          <Stack.Screen name="ProductDetail" component={ProductDetailScreen} options={{ title: 'Detalle del Producto' }} />
+          <Stack.Screen name="Cart" component={CartScreen} options={{ title: 'Carrito de Compras' }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
+  );
+}

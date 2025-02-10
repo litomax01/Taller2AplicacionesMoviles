@@ -8,40 +8,27 @@ import { InputComponent } from '../components/InputComponent';
 import { ButtonComponent } from '../components/ButtonComponent';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { User } from '../navigator/StackNavigator';
 
-interface Props {
-    users: User[];
-}
+const usersDB = [
+    { id: 1, name: 'Viviana Flores', email: 'vflores@gmail.com', password: '123456' },
+    { id: 2, name: 'Ariel Ron', email: 'aron@gmail.com', password: '123456' },
+];
 
-interface LoginForm {
-    email: string;
-    password: string;
-}
-
-export const LoginScreen = ({ users }: Props) => {
-    const [loginForm, setLoginForm] = useState<LoginForm>({
-        email: '',
-        password: '',
-    });
-
-    const [hiddenPassword, setHiddenPassword] = useState<boolean>(true);
+const LoginScreen = () => {
+    const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+    const [hiddenPassword, setHiddenPassword] = useState(true);
     const navigation = useNavigation();
 
-    const handleChange = (name: string, value: string): void => {
+    const handleChange = (name: string, value: string) => {
         setLoginForm({ ...loginForm, [name]: value });
-        console.log(`Campo: ${name}, Valor: ${value}`);
     };
 
-    const verifyUser = (): User | undefined => {
-        return users.find(
-            (user) =>
-                user.email === loginForm.email && user.password === loginForm.password
-        );
+    const verifyUser = () => {
+        return usersDB.find((user) => user.email === loginForm.email && user.password === loginForm.password);
     };
 
-    const handleLogin = (): void => {
-        if (loginForm.email === '' || loginForm.password === '') {
+    const handleLogin = () => {
+        if (!loginForm.email || !loginForm.password) {
             Alert.alert('Error', 'Todos los campos son obligatorios');
             return;
         }
@@ -60,32 +47,16 @@ export const LoginScreen = ({ users }: Props) => {
             <TitleComponent title="Iniciar Sesión" />
             <BodyComponent>
                 <Text style={styles.titlePrincipal}>Bienvenido de nuevo</Text>
-                <Text style={styles.textDescription}>
-                    Realiza tus compras de manera rápida y segura
-                </Text>
+                <Text style={styles.textDescription}>Realiza tus compras de manera rápida y segura</Text>
                 <View style={styles.formContainer}>
-                    <InputComponent
-                        placeholder="Correo"
-                        keyboardType="email-address"
-                        handleChange={handleChange}
-                        name="email"
-                    />
-                    <InputComponent
-                        placeholder="Contraseña"
-                        handleChange={handleChange}
-                        name="password"
-                        isPassword={hiddenPassword}
-                    />
-                    <Icon
-                        name={hiddenPassword ? 'visibility' : 'visibility-off'}
-                        size={20}
-                        color={PRIMARY_COLOR}
-                        style={styles.iconPassword}
-                        onPress={() => setHiddenPassword(!hiddenPassword)}
-                    />
+                    <InputComponent placeholder="Correo" keyboardType="email-address" handleChange={handleChange} name="email" />
+                    <InputComponent placeholder="Contraseña" handleChange={handleChange} name="password" isPassword={hiddenPassword} />
+                    <Icon name={hiddenPassword ? 'visibility' : 'visibility-off'} size={20} color={PRIMARY_COLOR} style={styles.iconPassword} onPress={() => setHiddenPassword(!hiddenPassword)} />
                 </View>
                 <ButtonComponent title="Iniciar" handleSendInfo={handleLogin} />
             </BodyComponent>
         </View>
     );
 };
+
+export default LoginScreen;
