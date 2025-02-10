@@ -110,3 +110,4 @@ export const RegisterScreen = ({ users, addUser }: Props) => {
         </View>
     );
 };
+export default RegisterScreen;
